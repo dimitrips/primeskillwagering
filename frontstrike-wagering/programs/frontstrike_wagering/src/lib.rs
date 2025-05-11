@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkgP8eK6A4bP3");
+declare_id!("G4GSXiB5B2K1zEdziQuq7FBsTu4MoYMeJzBiisFBTPfZ");
 
 #[program]
 pub mod frontstrike_wagering {
