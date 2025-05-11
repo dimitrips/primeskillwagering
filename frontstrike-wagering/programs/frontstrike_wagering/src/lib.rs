@@ -1,6 +1,10 @@
 use anchor_lang::prelude::*;
+use std::str::FromStr;
 
-declare_id!("G4GSXiB5B2K1zEdziQuq7FBsTu4MoYMeJzBiisFBTPfZ");
+declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkgP8eK6A4bP3");
+
+// Hardcoded Treasury Address for Platform Fee
+const TREASURY_WALLET: &str = "G4GSXiB5B2K1zEdziQuq7FBsTu4MoYMeJzBiisFBTPfZ";
 
 #[program]
 pub mod frontstrike_wagering {
@@ -24,7 +28,7 @@ pub mod frontstrike_wagering {
     pub fn deposit_to_lobby(
         ctx: Context<DepositToLobby>,
         lives_purchased: u32,
-        team: u8, // 1 or 2
+        team: u8,
     ) -> Result<()> {
         let lobby = &mut ctx.accounts.lobby;
         let player = PlayerInfo {
@@ -110,7 +114,21 @@ pub mod frontstrike_wagering {
             let payout = share - fee;
 
             **match_account.to_account_info().try_borrow_mut_lamports()? -= payout;
-            **ctx.accounts.platform_treasury.to_account_info().try_borrow_mut_lamports()? += fee;
+
+            // Send platform fee to the treasury wallet
+            let treasury_pubkey = Pubkey::from_str(TREASURY_WALLET).unwrap();
+            let treasury_account = AccountInfo::new(
+                &treasury_pubkey,
+                false,
+                true,
+                &mut [],
+                &mut [],
+                &crate::ID,
+                false,
+                0,
+            );
+
+            **treasury_account.try_borrow_mut_lamports()? += fee;
         }
 
         Ok(())
@@ -169,7 +187,6 @@ pub struct BuyLives<'info> {
 pub struct SubmitMatchResults<'info> {
     #[account(mut)]
     pub match_account: Account<'info, MatchAccount>,
-    pub platform_treasury: AccountInfo<'info>,
     pub system_program: Program<'info, System>,
 }
 
