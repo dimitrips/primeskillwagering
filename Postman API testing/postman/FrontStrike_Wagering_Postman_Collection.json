@@ -1,1 +1,123 @@
-// Postman Collection JSON placeholder
+{
+    "info": {
+        "_postman_id": "f5a2e25a-8799-4e8e-b23d-9a8ed0a90d1f",
+        "name": "FrontStrike Wagering API",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Initialize Lobby",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "url": {
+                    "raw": "https://api.devnet.solana.com/initialize-lobby"
+                },
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\"match_id\": \"match_001\", \"life_value\": 10000000}"
+                }
+            }
+        },
+        {
+            "name": "Deposit to Lobby",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "url": {
+                    "raw": "https://api.devnet.solana.com/deposit-to-lobby"
+                },
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\"lobby_address\": \"{{lobby_address}}\", \"player_wallet\": \"{{player_wallet}}\", \"lives_purchased\": 10, \"team\": 1}"
+                }
+            }
+        },
+        {
+            "name": "Start Match",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "url": {
+                    "raw": "https://api.devnet.solana.com/start-match"
+                },
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\"lobby_address\": \"{{lobby_address}}\"}"
+                }
+            }
+        },
+        {
+            "name": "Buy Additional Lives",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "url": {
+                    "raw": "https://api.devnet.solana.com/buy-lives"
+                },
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\"match_address\": \"{{match_address}}\", \"player_wallet\": \"{{player_wallet}}\", \"additional_lives\": 5}"
+                }
+            }
+        },
+        {
+            "name": "Submit Match Results",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "url": {
+                    "raw": "https://api.devnet.solana.com/submit-match-results"
+                },
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\"match_address\": \"{{match_address}}\", \"final_lives\": [{\"player_wallet\": \"{{player_wallet}}\", \"lives_held\": 15}, {\"player_wallet\": \"7JkL...m2c\", \"lives_held\": 5}], \"is_valid_match\": true}"
+                }
+            }
+        },
+        {
+            "name": "Cancel Match",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "url": {
+                    "raw": "https://api.devnet.solana.com/cancel-match"
+                },
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\"match_address\": \"{{match_address}}\"}"
+                }
+            }
+        }
+    ]
+}
