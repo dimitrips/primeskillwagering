@@ -128,3 +128,92 @@ pub mod frontstrike_wagering {
         Ok(())
     }
 }
+
+#[derive(Accounts)]
+pub struct InitializeLobby<'info> {
+    #[account(init, payer = payer, space = 8 + 2048)]
+    pub lobby: Account<'info, Lobby>,
+    #[account(mut)]
+    pub payer: Signer<'info>,
+    pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
+pub struct DepositToLobby<'info> {
+    #[account(mut)]
+    pub lobby: Account<'info, Lobby>,
+    #[account(mut)]
+    pub player: Signer<'info>,
+}
+
+#[derive(Accounts)]
+pub struct StartMatch<'info> {
+    #[account(mut)]
+    pub lobby: Account<'info, Lobby>,
+    #[account(init, payer = payer, space = 8 + 2048)]
+    pub match_account: Account<'info, MatchAccount>,
+    #[account(mut)]
+    pub payer: Signer<'info>,
+    pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
+pub struct BuyLives<'info> {
+    #[account(mut)]
+    pub match_account: Account<'info, MatchAccount>,
+    #[account(mut)]
+    pub player: Signer<'info>,
+}
+
+#[derive(Accounts)]
+pub struct SubmitMatchResults<'info> {
+    #[account(mut)]
+    pub match_account: Account<'info, MatchAccount>,
+    pub platform_treasury: AccountInfo<'info>,
+    pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
+pub struct CancelMatchDueToTimeout<'info> {
+    #[account(mut)]
+    pub match_account: Account<'info, MatchAccount>,
+}
+
+#[account]
+pub struct Lobby {
+    pub match_id: String,
+    pub player_accounts: Vec<PlayerInfo>,
+    pub total_pot: u64,
+    pub life_value: u64,
+    pub created_at: i64,
+    pub team1_deposits: u8,
+    pub team2_deposits: u8,
+}
+
+#[account]
+pub struct MatchAccount {
+    pub match_id: String,
+    pub player_accounts: Vec<PlayerInfo>,
+    pub total_pot: u64,
+    pub life_value: u64,
+    pub created_at: i64,
+    pub completed_at: Option<i64>,
+    pub is_flagged: bool,
+}
+
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+pub struct PlayerInfo {
+    pub wallet: Pubkey,
+    pub lives_held: u32,
+    pub deposited: bool,
+}
+
+#[error_code]
+pub enum ErrorCode {
+    #[msg("Not enough deposits to start the match.")]
+    NotEnoughDeposits,
+    #[msg("Player not found in match.")]
+    PlayerNotFound,
+    #[msg("Match timeout not yet reached.")]
+    TimeoutNotReached,
+}
