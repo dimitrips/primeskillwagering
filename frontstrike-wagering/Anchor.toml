@@ -1,0 +1,9 @@
+[programs.localnet]
+frontstrike_wagering = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkgP8eK6A4bP3"
+
+[provider]
+cluster = "localnet"
+wallet = "~/.config/solana/id.json"
+
+[scripts]
+test = "mocha -t 1000000 tests/"
