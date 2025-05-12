@@ -1,0 +1,134 @@
+FrontStrike Wagering API
+
+📖 Project Overview
+
+The FrontStrike Wagering API is a Node.js backend service that interacts with the Solana blockchain to handle crypto-based wagers for the competitive FPS game FrontStrike. Players can wager SOL, buy lives mid-game, and receive payouts based on match results.
+
+This API serves as the middleware layer, enabling seamless communication between the game server and the Solana smart contracts, handling all necessary transactions and state updates.
+
+🔑 Why This Exists:
+
+FrontStrike is designed with a Win-2-Earn model, allowing players to bet on their performance during live matches. This API abstracts the complexity of interacting with Solana smart contracts, providing simple RESTful endpoints to manage:
+
+Match creation
+
+Player deposits
+
+Mid-game purchases
+
+Result submissions
+
+Automatic payouts
+
+This allows game developers to integrate blockchain wagering into FrontStrike with minimal effort, focusing purely on game mechanics.
+
+💻 Environment Setup
+
+1️⃣ Clone the repository:
+
+git clone https://github.com/YourRepo/FrontStrike-Wagering-API.git
+cd FrontStrike-Wagering-API
+
+2️⃣ Install Dependencies:
+
+npm install
+
+3️⃣ Create a .env file:
+
+PORT=3000
+SOLANA_NETWORK=https://api.devnet.solana.com
+
+4️⃣ Start the server:
+
+node server.js
+
+The server should be running at: http://localhost:3000
+
+🚀 Available Endpoints
+
+🎯 1. Initialize Lobby
+
+POST /initialize-lobby
+
+Body:
+
+{
+  "match_id": "match_001",
+  "life_value": 10000000
+}
+
+🎯 2. Deposit to Lobby
+
+POST /deposit-to-lobby
+
+Body:
+
+{
+  "lobby_address": "3HJb...1fd",
+  "player_wallet": "4NkL...m5d",
+  "lives_purchased": 10,
+  "team": 1
+}
+
+🎯 3. Start Match
+
+POST /start-match
+
+Body:
+
+{
+  "lobby_address": "3HJb...1fd"
+}
+
+🎯 4. Buy Lives
+
+POST /buy-lives
+
+Body:
+
+{
+  "match_address": "8KLp...d1T",
+  "player_wallet": "4NkL...m5d",
+  "additional_lives": 5
+}
+
+🎯 5. Submit Match Results
+
+POST /submit-match-results
+
+Body:
+
+{
+  "match_address": "8KLp...d1T",
+  "final_lives": [
+    { "player_wallet": "4NkL...m5d", "lives_held": 15 },
+    { "player_wallet": "7JkL...m2c", "lives_held": 5 }
+  ],
+  "is_valid_match": true
+}
+
+🎯 6. Cancel Match
+
+POST /cancel-match
+
+Body:
+
+{
+  "match_address": "8KLp...d1T"
+}
+
+✅ Testing the API
+
+You can use Postman to test these endpoints easily. Import the provided Postman collection and use the Devnet Environment for quick tests.
+
+🚀 Future Enhancements
+
+Add anti-cheat mechanisms during result submission.
+
+Implement on-chain verification of player identities.
+
+Real-time WebSocket updates for live match status.
+
+🏁 Contributing
+
+Feel free to open a PR or submit issues for improvements. This is just the foundation of blockchain wagering for FrontStrike.
